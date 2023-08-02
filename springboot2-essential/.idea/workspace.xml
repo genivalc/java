@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c97c9b6e-2d36-44aa-80fe-d8691884f75d" name="Changes" comment="primeira chamada usando o spring">
-      <change afterPath="$PROJECT_DIR$/src/main/java/academy/devdojo/springboot2/util/DateUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="c97c9b6e-2d36-44aa-80fe-d8691884f75d" name="Changes" comment="upgrade">
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/academy/devdojo/springboot2/controller/AnimeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/academy/devdojo/springboot2/controller/AnimeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/academy/devdojo/springboot2/start/ApplicationStart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/academy/devdojo/springboot2/ApplicationStart.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,13 +86,31 @@
       <option name="project" value="LOCAL" />
       <updated>1690986943456</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="SpringBootApplication, Component">
+      <option name="closed" value="true" />
+      <created>1690999341557</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1690999341557</updated>
+    </task>
+    <task id="LOCAL-00004" summary="upgrade">
+      <option name="closed" value="true" />
+      <created>1690999359184</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1690999359184</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fix init project" />
     <MESSAGE value="primeira chamada usando o spring" />
-    <option name="LAST_COMMIT_MESSAGE" value="primeira chamada usando o spring" />
+    <MESSAGE value="SpringBootApplication, Component" />
+    <MESSAGE value="upgrade" />
+    <option name="LAST_COMMIT_MESSAGE" value="upgrade" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
