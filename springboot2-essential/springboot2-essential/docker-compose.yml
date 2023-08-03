@@ -12,3 +12,5 @@ services:
 
 volumes:
   devdojo_data:
+
+#docker-compose-up
