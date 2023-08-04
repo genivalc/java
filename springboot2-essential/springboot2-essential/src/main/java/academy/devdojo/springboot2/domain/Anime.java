@@ -2,6 +2,7 @@
 
 package academy.devdojo.springboot2.domain;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.Id;
@@ -14,6 +15,7 @@ import javax.persistence.GenerationType;
 @AllArgsConstructor //Cria constructor para todos
 @NoArgsConstructor
 @Entity
+@Builder
 public class Anime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
