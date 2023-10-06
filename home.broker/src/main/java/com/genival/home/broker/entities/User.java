@@ -34,6 +34,9 @@ public class User {
     @Column(name = "user_email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "user_type", nullable = false, unique = false)
+    private String type;
+
     @Column(name = "user_cpf", length = 11, nullable = false, unique = true)
     private String cpf;
 
