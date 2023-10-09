@@ -54,6 +54,20 @@ public class User {
     @Column(name = "user_dataupgrade")
     private LocalDateTime dataUpgrade;
 
+    public User(Long id, Integer year, String password, String name, String email, String type, String cpf, String phone, Integer zipCode) {
+        this.id = id;
+        this.year = year;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.type = type;
+        this.cpf = cpf;
+        this.phone = phone;
+        this.zipCode = zipCode;
+        this.dateRegister = dateRegister;
+        this.dataUpgrade = dataUpgrade;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
