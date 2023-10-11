@@ -8,7 +8,7 @@ public class UserPostRequestBody {
     private String name;
     private String email;
     private String type;
-    private String cpf;
+    private Integer cpf;
     private String phone;
     private Integer zipCode;
 

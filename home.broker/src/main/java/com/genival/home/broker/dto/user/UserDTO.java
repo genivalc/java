@@ -19,7 +19,7 @@ public class UserDTO {
     private String name;
     private String email;
     private String type;
-    private String cpf;
+    private Integer cpf;
     private String phone;
     private Integer zipCode;
 
