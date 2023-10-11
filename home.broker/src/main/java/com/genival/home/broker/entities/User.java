@@ -38,7 +38,7 @@ public class User {
     private String type;
 
     @Column(name = "user_cpf", length = 11, nullable = false, unique = true)
-    private String cpf;
+    private Integer cpf;
 
     @Column(name = "user_phone", length = 11, nullable = false, unique = true)
     private String phone;
@@ -54,7 +54,7 @@ public class User {
     @Column(name = "user_dataupgrade")
     private LocalDateTime dataUpgrade;
 
-    public User(Long id, Integer year, String password, String name, String email, String type, String cpf, String phone, Integer zipCode) {
+    public User(Long id, Integer year, String password, String name, String email, String type, Integer cpf, String phone, Integer zipCode) {
         this.id = id;
         this.year = year;
         this.password = password;
