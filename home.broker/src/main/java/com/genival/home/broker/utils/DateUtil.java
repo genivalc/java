@@ -1,4 +1,4 @@
-package com.genival.home.broker.util;
+package com.genival.home.broker.utils;
 
 import org.springframework.stereotype.Component;
 
