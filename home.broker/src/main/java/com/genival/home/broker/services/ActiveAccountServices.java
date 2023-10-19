@@ -90,8 +90,8 @@ public class ActiveAccountServices {
 
                    ActiveAccount ac = new ActiveAccount();
                    ac.setId(id);
-                   ac.setConta(contaDAO.buscaContaPorId(idConta, clienteDAO));
-                   ac.setAtivo(ativoDAO.buscaAtivoPorId(idAtivo));
+//                   ac.setConta(contaDAO.buscaContaPorId(idConta, clienteDAO));
+//                   ac.setAtivo(ativoDAO.buscaAtivoPorId(idAtivo));
                    ac.setTotalActive(totalActive);
                    ac.setValorCompra(valorCompra);
                    ac.setDateCreation(dataCriacao);
