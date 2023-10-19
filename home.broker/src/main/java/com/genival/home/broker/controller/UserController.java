@@ -3,7 +3,7 @@ package com.genival.home.broker.controller;
 import com.genival.home.broker.dto.user.UserMinDTO;
 import com.genival.home.broker.requests.UserPostRequestBody;
 import com.genival.home.broker.services.UserServices;
-import com.genival.home.broker.util.DateUtil;
+import com.genival.home.broker.utils.DateUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

@@ -6,7 +6,7 @@ import com.genival.home.broker.entities.User;
 import com.genival.home.broker.exception.BadRequestException;
 import com.genival.home.broker.repositories.UserRepositories;
 import com.genival.home.broker.requests.UserPostRequestBody;
-import com.genival.home.broker.util.DateUtil;
+import com.genival.home.broker.utils.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

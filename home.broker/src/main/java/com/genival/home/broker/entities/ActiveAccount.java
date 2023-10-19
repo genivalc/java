@@ -1,5 +1,6 @@
 package com.genival.home.broker.entities;
 
+import com.genival.home.broker.utils.Util;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "tb_activeAccount")
 public class ActiveAccount {
+    Util util = new Util();
 
     private static long serial;
     @Id
@@ -145,16 +147,16 @@ public class ActiveAccount {
 //                        + " | " + util.textoColuna(util.FormataData(dataCriacao), 12) + " |\n";
 //    }
 //
-//    public String toStringHeader() {
-//        return
-//
-//                "| " + util.textoColuna("ID",  3)
-//                        + " | " + util.textoColuna("Cliente", 12)
-//                        + " | " + util.textoColuna("Ativo", 6)
-//                        + " | " + util.textoColuna("Total", 5)
-//                        + " | " + util.textoColuna("Valor Total", 11)
-//                        + " | " + util.textoColuna("Cotacao Atual", 13)
-//                        + " | " + util.textoColuna("Data Criação", 12) + " |\n"
-//                        + "-------------------------------------------------------------------------\n";
-//    }
+    public String toStringHeader() {
+        return
+
+                "| " + util.columnText("ID",  3)
+                        + " | " + util.columnText("Cliente", 12)
+                        + " | " + util.columnText("Ativo", 6)
+                        + " | " + util.columnText("Total", 5)
+                        + " | " + util.columnText("Valor Total", 11)
+                        + " | " + util.columnText("Cotacao Atual", 13)
+                        + " | " + util.columnText("Data Criação", 12) + " |\n"
+                        + "-------------------------------------------------------------------------\n";
+    }
 }
