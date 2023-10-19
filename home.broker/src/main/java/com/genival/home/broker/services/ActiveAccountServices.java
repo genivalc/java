@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -78,27 +79,26 @@ public class ActiveAccountServices {
     public List<ActiveAccount> getAllActiveAccount(ContaDAO contaDAO, AtivoDAO ativoDAO, ClienteDAO clienteDAO) {
         List<ActiveAccount> alActiveAccount  =  searchAlActiveAccount();
 
-       alActiveAccount.stream().map(rs -> {
+       return alActiveAccount.stream().map(rs -> {
                    Long id = rs.getId();
-                   Long idConta = rs.get;
-                   Long idAtivo = rs.getLong("ativo");
-                   int totalAtivos = rs.getInt("totalAtivos");
-                   BigDecimal valorCompra = new BigDecimal(rs.getFloat("valorCompra"));
-                   LocalDateTime dataCriacao = Util.timestampToLocalDateTime(rs.getTimestamp("dataCriacao"));
-                   LocalDateTime dataModificacao = Util.timestampToLocalDateTime(rs.getTimestamp("dataModificacao"));
+                   Long idAccount = rs.getAccount().getId();
+                   Long idActive = rs.getActive().getId();
+                   int totalActive = rs.getTotalActive();
+                   BigDecimal valorCompra = rs.getValorCompra();
+                   LocalDateTime dataCriacao = rs.getDateCreation();
+                   LocalDateTime dataModificacao = rs.getDateModification();
 
-                   AtivoConta ac = new AtivoConta();
+                   ActiveAccount ac = new ActiveAccount();
                    ac.setId(id);
                    ac.setConta(contaDAO.buscaContaPorId(idConta, clienteDAO));
                    ac.setAtivo(ativoDAO.buscaAtivoPorId(idAtivo));
-                   ac.setTotalAtivos(totalAtivos);
+                   ac.setTotalActive(totalActive);
                    ac.setValorCompra(valorCompra);
-                   ac.setDataCriacao(dataCriacao);
-                   ac.setDataModificacao(dataModificacao);
+                   ac.setDateCreation(dataCriacao);
+                   ac.setDateModification(dataModificacao);
 
                    return ac;
-               })
-               .collect(Collectors.toList());
+               }).collect(Collectors.toList());
     }
 
     public ActiveAccount getAtivoContaById(Long id) {
