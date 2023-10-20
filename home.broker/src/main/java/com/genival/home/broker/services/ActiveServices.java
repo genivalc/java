@@ -44,6 +44,7 @@ public class ActiveServices {
     }
 
     public boolean remover(Long id) {
+        Active actives = findById(id);
         activeRepositories.deleteById(id);
         return true;
     }
