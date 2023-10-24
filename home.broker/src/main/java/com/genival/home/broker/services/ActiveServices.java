@@ -9,7 +9,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -19,10 +18,9 @@ import java.util.List;
 public class ActiveServices {
 
 
+    Util util = new Util();
     @Autowired
     private ActiveRepositories activeRepositories;
-
-    Util util = new Util();
 
     public Active save(Active active) {
         return activeRepositories.save(active);
@@ -44,6 +42,7 @@ public class ActiveServices {
     }
 
     public boolean remover(Long id) {
+        Active actives = findById(id);
         activeRepositories.deleteById(id);
         return true;
     }
@@ -65,10 +64,10 @@ public class ActiveServices {
         List<Active> actives = findAll();
         for (Active active : actives) {
             if (active.getTicker().equals(ticker)) {
-              return active;
+                return active;
             }
         }
-        return  null;
+        return null;
     }
 
     public Active upgrade(Active elemento) {
@@ -76,13 +75,13 @@ public class ActiveServices {
         return activeRepositories.save(elemento);
     }
 
-    public boolean hasActive(Active a){
-            List<Active> actives = findAll();
-            for (Active ative : actives) {
-                if (ative != null && ative.equals(a)) {
-                    return true;
-                }
+    public boolean hasActive(Active a) {
+        List<Active> actives = findAll();
+        for (Active ative : actives) {
+            if (ative != null && ative.equals(a)) {
+                return true;
             }
-            return false;
         }
+        return false;
+    }
 }

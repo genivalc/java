@@ -22,10 +22,13 @@ import java.util.stream.Collectors;
 @Log4j2
 @RequiredArgsConstructor
 public class ActiveAccountServices {
+    Util util = new Util();
     @Autowired
     private ActiveAccountRepositories activeAccountRepositories;
-
-    Util util = new Util();
+    @Autowired
+    private AccountServices accountServices;
+    @Autowired
+    private ActiveServices activeServices;
 
 //    final int nAtivoConta = 100;
 //    private final AtivoConta[] relacao = new AtivoConta[nAtivoConta];
@@ -46,19 +49,19 @@ public class ActiveAccountServices {
         return true;
     }
 
-//    @Transactional
-//    public void payDividends(String ticker, BigDecimal dividendPerShare) {
-//        List<AtivoConta> carteira = ativoContaRepository.findAll();
-//
-//        for (AtivoConta ativoConta : carteira) {
-//            if (!ativoConta.getConta().equals(contaRepository.findBolsaConta(contaRepository.findAll()))) {
-//                if (ativoConta.getAtivo().getTicker().equals(ticker)) {
-//                    BigDecimal totalDividends = dividendPerShare.multiply(new BigDecimal(ativoConta.getTotalAtivos()));
-//                    contaRepository.payDividends(contaRepository.findBolsaConta(contaRepository.findAll()), ativoConta.getConta(), totalDividends);
-//                }
-//            }
-//        }
-//    }
+    @Transactional
+    public void payDividends(String ticker, BigDecimal dividendPerShare, Client client) {
+        List<ActiveAccount> carteira = activeAccountRepositories.findAll();
+
+        for (ActiveAccount ativoConta : carteira) {
+            if (!ativoConta.getAccount().equals(accountServices.searchAccountStock(accountServices.findAll()))) {
+                if (ativoConta.getActive().getTicker().equals(ticker)) {
+                    BigDecimal totalDividends = dividendPerShare.multiply(new BigDecimal(ativoConta.getTotalActive()));
+                    accountServices.pagaDividendos(accountServices.searchAccountStock(accountServices.findAll()), ativoConta.getAccount(), totalDividends);
+                }
+            }
+        }
+    }
 
     public boolean isFull() {
         return activeAccountRepositories.count() == 0;
@@ -72,33 +75,22 @@ public class ActiveAccountServices {
         return activeAccountRepositories.findAll();
     }
 
-    public List<ActiveAccount> getAllAtivoContas(Account account, Active active) {
-        return activeAccountRepositories.findAllByContaAndAtivo(account, active);
-    }
 
-    public List<ActiveAccount> getAllActiveAccount(ContaDAO contaDAO, AtivoDAO ativoDAO, ClienteDAO clienteDAO) {
-        List<ActiveAccount> alActiveAccount  =  searchAlActiveAccount();
+    public List<ActiveAccount> getAllActiveAccount(Client client) {
+        List<ActiveAccount> allActiveAccounts = searchAlActiveAccount();
 
-       return alActiveAccount.stream().map(rs -> {
-                   Long id = rs.getId();
-                   Long idAccount = rs.getAccount().getId();
-                   Long idActive = rs.getActive().getId();
-                   int totalActive = rs.getTotalActive();
-                   BigDecimal valorCompra = rs.getValorCompra();
-                   LocalDateTime dataCriacao = rs.getDateCreation();
-                   LocalDateTime dataModificacao = rs.getDateModification();
+        return allActiveAccounts.stream().map(activeAccount -> {
+            ActiveAccount ac = new ActiveAccount();
+            ac.setId(activeAccount.getId());
+            ac.setAccount(accountServices.searchAccounts(client));
+            ac.setActive(activeServices.findById(ac.getActive().getId()));
+            ac.setTotalActive(activeAccount.getTotalActive());
+            ac.setValorCompra(activeAccount.getValorCompra());
+            ac.setDateCreation(activeAccount.getDateCreation());
+            ac.setDateModification(activeAccount.getDateModification());
 
-                   ActiveAccount ac = new ActiveAccount();
-                   ac.setId(id);
-//                   ac.setConta(contaDAO.buscaContaPorId(idConta, clienteDAO));
-//                   ac.setAtivo(ativoDAO.buscaAtivoPorId(idAtivo));
-                   ac.setTotalActive(totalActive);
-                   ac.setValorCompra(valorCompra);
-                   ac.setDateCreation(dataCriacao);
-                   ac.setDateModification(dataModificacao);
-
-                   return ac;
-               }).collect(Collectors.toList());
+            return ac;
+        }).collect(Collectors.toList());
     }
 
     public ActiveAccount getAtivoContaById(Long id) {
@@ -114,7 +106,7 @@ public class ActiveAccountServices {
     public StringBuilder showAllAtivoContas(Client cliente) {
         List<ActiveAccount> carteira = searchAlActiveAccount();
 
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder();
         boolean headerPrinted = false;
         BigDecimal totalAssets = BigDecimal.ZERO;
         BigDecimal totalAssetsInitialPrice = BigDecimal.ZERO;
@@ -162,8 +154,8 @@ public class ActiveAccountServices {
         return null;
     }
 
-    public int countAssets(Account currentAccount, Active targetAsset) {
-        List<ActiveAccount> assetAccounts = getAllAtivoContas(currentAccount, targetAsset);
+    public int countAssets() {
+        List<ActiveAccount> assetAccounts = searchAlActiveAccount();
         return assetAccounts.size();
     }
 
@@ -172,7 +164,7 @@ public class ActiveAccountServices {
         ActiveAccount newBuyerAccount = createActiveAccount(asset, buyerAccount, quantity);
         ActiveAccount newSellerAccount = createActiveAccount(asset, sellerAccount, quantity);
 
-        List<ActiveAccount> portfolio = getAllAtivoContas();
+        List<ActiveAccount> portfolio = searchAlActiveAccount();
 
         boolean found = false;
 
