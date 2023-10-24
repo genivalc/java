@@ -4,9 +4,7 @@ import com.genival.home.broker.entities.Account;
 import com.genival.home.broker.entities.Active;
 import com.genival.home.broker.entities.ActiveAccount;
 import com.genival.home.broker.entities.Client;
-import com.genival.home.broker.repositories.AccountRepositories;
 import com.genival.home.broker.repositories.ActiveAccountRepositories;
-import com.genival.home.broker.repositories.ClientRepositories;
 import com.genival.home.broker.utils.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,18 +22,13 @@ import java.util.stream.Collectors;
 @Log4j2
 @RequiredArgsConstructor
 public class ActiveAccountServices {
+    Util util = new Util();
     @Autowired
     private ActiveAccountRepositories activeAccountRepositories;
-
     @Autowired
     private AccountServices accountServices;
-
-
     @Autowired
     private ActiveServices activeServices;
-
-
-    Util util = new Util();
 
 //    final int nAtivoConta = 100;
 //    private final AtivoConta[] relacao = new AtivoConta[nAtivoConta];
@@ -82,12 +75,9 @@ public class ActiveAccountServices {
         return activeAccountRepositories.findAll();
     }
 
-    public List<ActiveAccount> getAllAtivoContas(Account account, Active active) {
-        return activeAccountRepositories.findAllByContaAndAtivo(account, active);
-    }
 
     public List<ActiveAccount> getAllActiveAccount(Client client) {
-        List<ActiveAccount> allActiveAccounts  =  searchAlActiveAccount();
+        List<ActiveAccount> allActiveAccounts = searchAlActiveAccount();
 
         return allActiveAccounts.stream().map(activeAccount -> {
             ActiveAccount ac = new ActiveAccount();
@@ -116,7 +106,7 @@ public class ActiveAccountServices {
     public StringBuilder showAllAtivoContas(Client cliente) {
         List<ActiveAccount> carteira = searchAlActiveAccount();
 
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder();
         boolean headerPrinted = false;
         BigDecimal totalAssets = BigDecimal.ZERO;
         BigDecimal totalAssetsInitialPrice = BigDecimal.ZERO;
@@ -164,8 +154,8 @@ public class ActiveAccountServices {
         return null;
     }
 
-    public int countAssets(Account currentAccount, Active targetAsset) {
-        List<ActiveAccount> assetAccounts = getAllAtivoContas(currentAccount, targetAsset);
+    public int countAssets() {
+        List<ActiveAccount> assetAccounts = searchAlActiveAccount();
         return assetAccounts.size();
     }
 
@@ -174,7 +164,7 @@ public class ActiveAccountServices {
         ActiveAccount newBuyerAccount = createActiveAccount(asset, buyerAccount, quantity);
         ActiveAccount newSellerAccount = createActiveAccount(asset, sellerAccount, quantity);
 
-        List<ActiveAccount> portfolio = getAllAtivoContas();
+        List<ActiveAccount> portfolio = searchAlActiveAccount();
 
         boolean found = false;
 

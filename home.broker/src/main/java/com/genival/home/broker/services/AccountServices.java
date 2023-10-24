@@ -1,6 +1,7 @@
 package com.genival.home.broker.services;
 
 import com.genival.home.broker.entities.Account;
+import com.genival.home.broker.entities.AccountMovement;
 import com.genival.home.broker.entities.Client;
 import com.genival.home.broker.repositories.AccountRepositories;
 import com.genival.home.broker.repositories.ClientRepositories;
@@ -18,22 +19,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountServices {
 
+    public Account[] contascorrente = new Account[50];
     Util util = new Util();
     @Autowired
     private AccountRepositories accountRepositories;
     @Autowired
     private ClientRepositories clientRepositories;
+    @Autowired
+    private AccountMovementServices accountMovementServices;
 
     public Account save(Account account) {
         return accountRepositories.save(account);
     }
 
 
-        public void  creditoInicialConta(ClienteDAO clienteDAO, MovimentacaoContaDAO mCD, Conta novaConta) {
-        BigDecimal valor = new BigDecimal(20000.0);
-        transferencia(searchAccountStock(searchAccounts(clienteDAO)), novaConta, valor);
+    public void initialAccountCredit(Client client, Account newAccount) {
+        BigDecimal valor = new BigDecimal("20000.0");
+        validateTransfer(searchAccountStock(findAll()), newAccount, valor);
         String descricaoMov = "Boas Vindas de Abertura de Conta";
-//        mCD.insereMovimentacao(searchAccountStock(searchAccounts(clienteDAO)), novaConta, valor, descricaoMov);
+        accountMovementServices.saveMovement(searchAccountStock(findAll()), newAccount, valor, descricaoMov);
     }
 
     public boolean upgrade(Account account) {
@@ -42,14 +46,14 @@ public class AccountServices {
         return true;
     }
 
-    public void mensalidade(MovimentacaoContaDAO mCD, ClienteDAO clienteDAO){
-        Conta contaBolsa = searchAccountStock(searchAccounts(clienteDAO));
-        BigDecimal valor = new BigDecimal(20.0);
-        for (Conta conta : contascorrente) {
-            if(conta != null){
-                transferencia(conta, contaBolsa, valor);
-                String descricaoMov = "Mensalidade da conta";
-                mCD.insereMovimentacao(conta, contaBolsa, valor, descricaoMov);
+    public void monthlyPayment(Client client) {
+        Account accountScholarship = searchAccountStock(findAll());
+        BigDecimal value = new BigDecimal("20.0");
+        for (Account conta : contascorrente) {
+            if (conta != null) {
+                validateTransfer(conta, accountScholarship, value);
+                String descriptionOfAccountMovement = "Mensalidade da conta";
+                accountMovementServices.saveMovement(conta, accountScholarship, value, descriptionOfAccountMovement);
             }
         }
     }
@@ -66,7 +70,6 @@ public class AccountServices {
         return null;
 
     }
-
 
 
     public Account findById(long id) {
@@ -94,8 +97,13 @@ public class AccountServices {
     }
 
     public Client customersearchbyAccountId(long id, Client client) {
-        Account contas = searchAccounts(client);
-        return contas.getClient();
+        Account account = searchAccounts(client);
+        return account.getClient();
+    }
+
+    public Account customersearchbyAccount(long id, Client client) {
+        Account account = searchAccounts(client);
+        return account;
     }
 
     public boolean validateId(long id) {
@@ -117,46 +125,46 @@ public class AccountServices {
         return true;
     }
 
-    public boolean deposito(Conta destino, BigDecimal valor, MovimentacaoContaDAO mCD) {
-        destino.entrada(valor);
-        altera(destino);
-        String descricaoMov = "Depósito";
-        mCD.insereMovimentacao(null, destino, valor, descricaoMov);
+    public boolean deposit(Account destiny, BigDecimal value) {
+        destiny.setBalance(value);
+        upgrade(destiny);
+        String descriptionOfAccountMovement = "Depósito";
+        accountMovementServices.saveMovement(null, destiny, value, descriptionOfAccountMovement);
         return true;
     }
 
-    public boolean saque(Conta origem, BigDecimal valor, MovimentacaoContaDAO mCD) {
-        if (origem.getSaldo().compareTo(valor) >= 0) {
-            origem.retirada(valor);
-            altera(origem);
+    public boolean withdraw(Account origin, BigDecimal value) {
+        if (origin.getBalance().compareTo(value) >= 0) {
+            origin.setBalance(origin.getBalance().subtract(value));
+            upgrade(origin);
             String descricaoMov = "Saque";
-            mCD.insereMovimentacao(origem, null, valor, descricaoMov);
+            accountMovementServices.saveMovement(origin, null, value, descricaoMov);
             return true;
         }
         return false;
     }
 
-    public boolean pagamento(Conta origem, BigDecimal valor, MovimentacaoContaDAO mCD, ClienteDAO clienteDAO) {
-        if (transferencia(origem, this.searchAccountStock(searchAccounts(clienteDAO)), valor)) {
-            String descricaoMov = "Pagamento para Bolsa";
-            mCD.insereMovimentacao(origem, this.searchAccountStock(searchAccounts(clienteDAO)), valor, descricaoMov);
+    public boolean payment(Account origin, BigDecimal valor) {
+        if (validateTransfer(origin, this.searchAccountStock(findAll()), valor)) {
+            String descriptionOfAccountMovement = "Pagamento para Bolsa";
+            accountMovementServices.saveMovement(origin, this.searchAccountStock(findAll()), valor, descriptionOfAccountMovement);
             return true;
         }
         return false;
 
     }
 
-    public boolean transfere(Conta origem, Conta destino, BigDecimal valor, MovimentacaoContaDAO mCD) {
-        if (transferencia(origem, destino, valor)) {
-            MovimentacaoConta m = new MovimentacaoConta();
-            m.setValor(valor);
-            m.setConta(origem);
-            m.setTipMov(2);
-            m.setDescricao("Transferencia entre contas");
-            mCD.insere(m);
-            m.setConta(destino);
-            m.setTipMov(1);
-            mCD.insere(m);
+    public boolean transfere(Account origem, Account destino, BigDecimal valor) {
+        if (validateTransfer(origem, destino, valor)) {
+            AccountMovement m = new AccountMovement();
+            m.setValue(valor);
+            m.setAccount(origem);
+            m.setTypeMovement(2);
+            m.setDescription("Transferencia entre contas");
+            accountMovementServices.save(m);
+            m.setAccount(destino);
+            m.setTypeMovement(1);
+            accountMovementServices.save(m);
 
             return true;
         }
@@ -176,9 +184,9 @@ public class AccountServices {
     }
 
     public boolean pagaDividendos(Account origem, Account destino, BigDecimal valor) {
-        if (transferencia(origem, destino, valor)) {
+        if (validateTransfer(origem, destino, valor)) {
             String descricaoMov = "Pagamento de Dividendos";
-            mCD.insereMovimentacao(origem, destino, valor, descricaoMov);
+            accountMovementServices.saveMovement(origem, destino, valor, descricaoMov);
 
             return true;
         }

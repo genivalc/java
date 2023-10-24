@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Log4j2
@@ -23,7 +22,7 @@ public class ClientServices {
         return true;
     }
 
-    private Client findById(long id){
+    private Client findById(long id) {
         return clientRepositories.findById(id).orElse(null);
     }
 
@@ -37,7 +36,7 @@ public class ClientServices {
     }
 
     private StringBuilder printList(List<Client> cliente) {
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder();
         for (Client c : cliente) {
             sb.append(c).append("\n");
         }
@@ -45,22 +44,14 @@ public class ClientServices {
     }
 
     public void remover(Long elemento) {
-        // Your code to remove a client from the repository by ID
         clientRepositories.deleteById(elemento);
     }
 
     public Client upgrade(Client client) {
-        // Your code to update a client in the repository
         return clientRepositories.save(client);
     }
 
-//    public Client alterarSenhaCliente(Client elemento) {
-//        // Your code to update a client's password in the repository
-//        return clientRepositories.save(elemento);
-//    }
-//
-    public Client buscaClienteLogin(String login, String senha) {
-        // Your code to fetch a client by login and password from the repository
-        return clientRepositories.findByLoginAndPassword(login, senha);
+    public Client searchCustomerLogin(String login, String password) {
+        return clientRepositories.findByLoginAndPassword(login, password);
     }
 }

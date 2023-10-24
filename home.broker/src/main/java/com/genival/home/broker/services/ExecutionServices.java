@@ -1,7 +1,8 @@
 package com.genival.home.broker.services;
 
-import com.genival.home.broker.entities.Active;
+import com.genival.home.broker.entities.Account;
 import com.genival.home.broker.entities.Execution;
+import com.genival.home.broker.entities.Ordem;
 import com.genival.home.broker.repositories.ExecutionRepositories;
 import com.genival.home.broker.utils.Util;
 import lombok.RequiredArgsConstructor;
@@ -45,12 +46,12 @@ public class ExecutionServices {
         return executionRepositories.count() == 0;
     }
 
-    public boolean novaExecucao(Conta cComprador, Conta cVendedor, Ordem ordem, int qtdeVenda) {
-        Execucao execucao = new Execucao();
-        execucao.setContaCompra(cComprador);
-        execucao.setContaVenda(cVendedor);
-        execucao.setOrdem(ordem);
-        execucao.setQuantidade(qtdeVenda);
-        return execucaoDAO.adiciona(execucao);
+    public boolean newExecution(Account buyer, Account seller, Ordem ordem, int salesQuantity) {
+        Execution execution = new Execution();
+        execution.setAccountPurchase(buyer);
+        execution.setAccountSale(seller);
+        execution.setOrdem(ordem);
+        execution.setAmount(salesQuantity);
+        return save(execution);
     }
 }
