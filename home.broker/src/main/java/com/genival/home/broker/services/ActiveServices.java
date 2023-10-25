@@ -3,11 +3,11 @@ package com.genival.home.broker.services;
 
 import com.genival.home.broker.entities.Active;
 import com.genival.home.broker.repositories.ActiveRepositories;
-import com.genival.home.broker.utils.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,8 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ActiveServices {
 
-
-    Util util = new Util();
     @Autowired
     private ActiveRepositories activeRepositories;
 
@@ -26,14 +24,17 @@ public class ActiveServices {
         return activeRepositories.save(active);
     }
 
+    @Transactional(readOnly = true)
     public boolean isEmpty() {
         return activeRepositories.count() == 0;
     }
 
+    @Transactional(readOnly = true)
     public List<Active> findAll() {
         return activeRepositories.findAll();
     }
 
+    @Transactional(readOnly = true)
     public void printList() {
         List<Active> actives = findAll();
         for (Active active : actives) {
@@ -47,6 +48,7 @@ public class ActiveServices {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public Active findById(Long id) {
         return activeRepositories.findById(id).orElse(null);
     }
@@ -60,6 +62,7 @@ public class ActiveServices {
         }
     }
 
+    @Transactional(readOnly = true)
     public Active busca(String ticker) {
         List<Active> actives = findAll();
         for (Active active : actives) {
@@ -71,10 +74,11 @@ public class ActiveServices {
     }
 
     public Active upgrade(Active elemento) {
-        Active actives = findById(elemento.getId());
+        findById(elemento.getId());
         return activeRepositories.save(elemento);
     }
 
+    @Transactional(readOnly = true)
     public boolean hasActive(Active a) {
         List<Active> actives = findAll();
         for (Active ative : actives) {

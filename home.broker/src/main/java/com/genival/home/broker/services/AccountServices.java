@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -58,6 +59,7 @@ public class AccountServices {
         }
     }
 
+    @Transactional(readOnly = true)
     public Account searchAccounts(Client client) {
         List<Account> accounts = findAll();
 
@@ -71,15 +73,17 @@ public class AccountServices {
 
     }
 
-
+    @Transactional(readOnly = true)
     public Account findById(long id) {
         return accountRepositories.findById(id).orElse(null);
     }
 
+    @Transactional(readOnly = true)
     public List<Account> findAll() {
         return accountRepositories.findAll();
     }
 
+    @Transactional(readOnly = true)
     public StringBuilder listAccounts() {
         List<Account> accounts = findAll();
 
@@ -96,20 +100,24 @@ public class AccountServices {
         return sb;
     }
 
+    @Transactional(readOnly = true)
     public Client customersearchbyAccountId(long id, Client client) {
         Account account = searchAccounts(client);
         return account.getClient();
     }
 
+    @Transactional(readOnly = true)
     public Account customersearchbyAccount(long id, Client client) {
         Account account = searchAccounts(client);
         return account;
     }
 
+    @Transactional(readOnly = true)
     public boolean validateId(long id) {
         return accountRepositories.existsById(id);
     }
 
+    @Transactional(readOnly = true)
     public Account searchAccountStock(List<Account> currentAccounts) {
         for (Account account : currentAccounts) {
             if (account.isStockExchangeAccount()) {

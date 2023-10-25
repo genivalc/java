@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class OrdemServices {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public Ordem findById(Long id) {
         return ordemRepositories.findById(id).orElse(null);
     }
@@ -60,6 +62,7 @@ public class OrdemServices {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public List<Ordem> searchAll(Client client) {
         List<Ordem> allOrdem = ordemRepositories.findAll();
         List<Ordem> ordens = new ArrayList<>();
@@ -80,6 +83,7 @@ public class OrdemServices {
         return ordens;
     }
 
+    @Transactional(readOnly = true)
     public Ordem searchOrderByID(Long idOrdem, Client client) {
         List<Ordem> ordens = searchAll(client);
 
@@ -93,6 +97,7 @@ public class OrdemServices {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public String showPurchaseOrders(Client client) {
         List<Ordem> ordens = searchAll(client);
 
@@ -107,6 +112,7 @@ public class OrdemServices {
 
     }
 
+    @Transactional(readOnly = true)
     public StringBuilder showSalesOrders(Client client) {
         List<Ordem> ordens = searchAll(client);
 
@@ -121,6 +127,7 @@ public class OrdemServices {
 
     }
 
+    @Transactional(readOnly = true)
     public String searchTickerById(Long id, Client client) {
         List<Ordem> ordens = searchAll(client);
         for (Ordem ordem : ordens) {
@@ -131,7 +138,7 @@ public class OrdemServices {
         return null;
     }
 
-    public StringBuilder executeOrders(Long id, Client client) {
+    public StringBuilder executeOrders(Client client) {
         List<Ordem> ordens = searchAll(client);
 
         StringBuilder sb = new StringBuilder("\n\n");

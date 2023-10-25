@@ -4,11 +4,11 @@ import com.genival.home.broker.entities.Account;
 import com.genival.home.broker.entities.Execution;
 import com.genival.home.broker.entities.Ordem;
 import com.genival.home.broker.repositories.ExecutionRepositories;
-import com.genival.home.broker.utils.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,8 +16,6 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 public class ExecutionServices {
-
-    Util util = new Util();
 
     @Autowired
     private ExecutionRepositories executionRepositories;
@@ -27,6 +25,7 @@ public class ExecutionServices {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public Execution findById(Long id) {
         return executionRepositories.findById(id).orElse(null);
     }
@@ -38,10 +37,12 @@ public class ExecutionServices {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public List<Execution> findAll() {
         return executionRepositories.findAll();
     }
 
+    @Transactional(readOnly = true)
     public boolean isEmpty() {
         return executionRepositories.count() == 0;
     }
