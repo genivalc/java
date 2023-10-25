@@ -5,7 +5,6 @@ import com.genival.home.broker.entities.Active;
 import com.genival.home.broker.entities.ActiveAccount;
 import com.genival.home.broker.entities.Client;
 import com.genival.home.broker.repositories.ActiveAccountRepositories;
-import com.genival.home.broker.utils.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 @Log4j2
 @RequiredArgsConstructor
 public class ActiveAccountServices {
-    Util util = new Util();
+
     @Autowired
     private ActiveAccountRepositories activeAccountRepositories;
     @Autowired
@@ -30,9 +29,6 @@ public class ActiveAccountServices {
     @Autowired
     private ActiveServices activeServices;
 
-//    final int nAtivoConta = 100;
-//    private final AtivoConta[] relacao = new AtivoConta[nAtivoConta];
-//    private BigDecimal valorCompra;
 
     @Transactional
     public boolean addActiveAccount(ActiveAccount activeAccount) {
@@ -63,19 +59,22 @@ public class ActiveAccountServices {
         }
     }
 
+    @Transactional(readOnly = true)
     public boolean isFull() {
         return activeAccountRepositories.count() == 0;
     }
 
+    @Transactional(readOnly = true)
     public boolean isEmpty() {
         return activeAccountRepositories.count() == 0;
     }
 
+    @Transactional(readOnly = true)
     public List<ActiveAccount> searchAlActiveAccount() {
         return activeAccountRepositories.findAll();
     }
 
-
+    @Transactional(readOnly = true)
     public List<ActiveAccount> getAllActiveAccount(Client client) {
         List<ActiveAccount> allActiveAccounts = searchAlActiveAccount();
 
@@ -93,6 +92,7 @@ public class ActiveAccountServices {
         }).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public ActiveAccount getAtivoContaById(Long id) {
         return activeAccountRepositories.findById(id).orElse(null);
     }
@@ -103,6 +103,7 @@ public class ActiveAccountServices {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public StringBuilder showAllAtivoContas(Client cliente) {
         List<ActiveAccount> carteira = searchAlActiveAccount();
 
@@ -146,6 +147,7 @@ public class ActiveAccountServices {
         return divisionMinusOne.multiply(new BigDecimal(100));
     }
 
+    @Transactional(readOnly = true)
     public String getTickerById(Long id) {
         ActiveAccount activeAccount = getAtivoContaById(id);
         if (activeAccount != null) {
@@ -154,6 +156,7 @@ public class ActiveAccountServices {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public int countAssets() {
         List<ActiveAccount> assetAccounts = searchAlActiveAccount();
         return assetAccounts.size();

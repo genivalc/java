@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,19 +23,22 @@ public class ClientServices {
         return true;
     }
 
-    private Client findById(long id) {
+    @Transactional(readOnly = true)
+    public Client findById(long id) {
         return clientRepositories.findById(id).orElse(null);
     }
 
+    @Transactional(readOnly = true)
     public boolean isEmpty() {
         return clientRepositories.count() == 0;
     }
 
+    @Transactional(readOnly = true)
     public List<Client> findAll() {
-        // Your code to fetch all clients from the repository
         return clientRepositories.findAll();
     }
 
+    @Transactional(readOnly = true)
     private StringBuilder printList(List<Client> cliente) {
         StringBuilder sb = new StringBuilder();
         for (Client c : cliente) {
@@ -44,13 +48,17 @@ public class ClientServices {
     }
 
     public void remover(Long elemento) {
+        findById(elemento);
+
         clientRepositories.deleteById(elemento);
     }
 
     public Client upgrade(Client client) {
+        findById(client.getId());
         return clientRepositories.save(client);
     }
 
+    @Transactional(readOnly = true)
     public Client searchCustomerLogin(String login, String password) {
         return clientRepositories.findByLoginAndPassword(login, password);
     }
