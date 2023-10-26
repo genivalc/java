@@ -19,57 +19,57 @@ import java.util.List;
 @RequestMapping("active")
 @RequiredArgsConstructor
 public class ActiveController {
-    private DateUtil dateUtil;
+
     private ActiveServices activeServices;
-    private Log log;
+
 
     @PostMapping()
     public ResponseEntity<Active> save(@RequestBody @Valid Active active) {
-        log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()) + " Active save POST");
+        
         return new ResponseEntity<>(activeServices.save(active), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "isempty")
     public ResponseEntity<Boolean> isEmpty() {
-        log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()) + " Active isEmpty GET");
+        
         return new ResponseEntity<>(activeServices.isEmpty(), HttpStatus.OK);
     }
 
     @GetMapping(path = "all")
     public ResponseEntity<List<Active>> findAll() {
-        log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()) + " Active find All GET");
+        
         return new ResponseEntity<>(activeServices.findAll(), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "{id}")
     public ResponseEntity<ActiveAccount> remover(@PathVariable long id) {
-        log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()) + " Active remover  Delete");
+        
         activeServices.remover(id);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @GetMapping(path = "{id}")
     public ResponseEntity<Active> changesPrice(@RequestBody @Valid String ticker, BigDecimal valor) {
-        log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()) + " Active changesPrice GET");
+        
         activeServices.changesPrice(ticker, valor);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @GetMapping(path = "busca")
     public ResponseEntity<Active> changesPrice(@RequestBody @Valid String ticker) {
-        log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()) + " Active busca GET");
+        
         return new ResponseEntity<>(activeServices.busca(ticker), HttpStatus.OK);
     }
 
     @PutMapping()
     public ResponseEntity<Active> upgrade(@RequestBody @Valid Active active) {
-        log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()) + " Active update Put");
+        
         return new ResponseEntity<>(activeServices.upgrade(active), HttpStatus.OK);
     }
 
     @GetMapping(path = "hasactive")
     public ResponseEntity<Boolean> changesPrice(@RequestBody @Valid Active active) {
-        log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()) + " Active hasactive GET");
+        
         activeServices.hasActive(active);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
