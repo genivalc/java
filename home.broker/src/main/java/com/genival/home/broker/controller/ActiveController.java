@@ -6,7 +6,7 @@ import com.genival.home.broker.services.ActiveServices;
 import com.genival.home.broker.utils.DateUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import org.apache.commons.logging.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +17,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("active")
-@Log4j2
 @RequiredArgsConstructor
 public class ActiveController {
-    private final DateUtil dateUtil;
-    private final ActiveServices activeServices;
+    private DateUtil dateUtil;
+    private ActiveServices activeServices;
+    private Log log;
 
     @PostMapping()
     public ResponseEntity<Active> save(@RequestBody @Valid Active active) {

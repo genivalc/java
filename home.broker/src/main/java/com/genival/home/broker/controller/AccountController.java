@@ -6,7 +6,7 @@ import com.genival.home.broker.services.AccountServices;
 import com.genival.home.broker.utils.DateUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import org.apache.commons.logging.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +17,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("account")
-@Log4j2
 @RequiredArgsConstructor
 public class AccountController {
+    private DateUtil dateUtil;
+    private AccountServices accountServices;
+    private Log log;
 
-    private final DateUtil dateUtil;
-    private final AccountServices accountServices;
 
     @PostMapping(path = "initial/credit")
     public ResponseEntity<Void> initialAccountCredit(@RequestBody @Valid Client client, Account newAccount) {

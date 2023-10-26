@@ -7,7 +7,7 @@ import com.genival.home.broker.services.ExecutionServices;
 import com.genival.home.broker.utils.DateUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import org.apache.commons.logging.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +17,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("execution")
-@Log4j2
 @RequiredArgsConstructor
 public class ExecutionController {
-    private final DateUtil dateUtil;
-    private final ExecutionServices executionServices;
+    private DateUtil dateUtil;
+    private ExecutionServices executionServices;
+
+    private Log log;
 
     @PostMapping()
     public ResponseEntity<Boolean> save(@RequestBody @Valid Execution element) {
@@ -53,7 +54,7 @@ public class ExecutionController {
         return new ResponseEntity<>(executionServices.isEmpty(), HttpStatus.OK);
     }
 
-    @PostMapping()
+    @PostMapping(path = "new")
     public ResponseEntity<Boolean> newExecution(@RequestBody @Valid Account buyer, Account seller, Ordem ordem, int salesQuantity) {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()) + " execution  new Execution Post");
         return new ResponseEntity<>(executionServices.newExecution(buyer, seller, ordem, salesQuantity), HttpStatus.CREATED);

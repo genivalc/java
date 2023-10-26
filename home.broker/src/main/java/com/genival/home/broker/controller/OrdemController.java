@@ -6,7 +6,7 @@ import com.genival.home.broker.services.OrdemServices;
 import com.genival.home.broker.utils.DateUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import org.apache.commons.logging.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +16,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("ordem")
-@Log4j2
 @RequiredArgsConstructor
 public class OrdemController {
-    private final DateUtil dateUtil;
-    private final OrdemServices ordemServices;
+    private DateUtil dateUtil;
+    private OrdemServices ordemServices;
+
+    private Log log;
 
     @PostMapping()
     public ResponseEntity<Boolean> save(@RequestBody @Valid Ordem ordem) {

@@ -6,7 +6,7 @@ import com.genival.home.broker.services.ActiveAccountServices;
 import com.genival.home.broker.utils.DateUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import org.apache.commons.logging.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +17,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("active/account")
-@Log4j2
 @RequiredArgsConstructor
 public class ActiveAccountController {
-    private final DateUtil dateUtil;
-    private final ActiveAccountServices activeAccountServices;
+    private DateUtil dateUtil;
+    private ActiveAccountServices activeAccountServices;
+    private Log log;
 
     @PostMapping()
     public ResponseEntity<Boolean> addActiveAccount(@RequestBody @Valid ActiveAccount activeAccount) {
@@ -50,7 +50,7 @@ public class ActiveAccountController {
     }
 
     @GetMapping(path = "isempty")
-    public ResponseEntity<Boolean> isEmpty() {
+    public ResponseEntity<Boolean> empty() {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()) + " Active Account isEmpty GET");
         return new ResponseEntity<>(activeAccountServices.isEmpty(), HttpStatus.OK);
     }
@@ -61,7 +61,7 @@ public class ActiveAccountController {
         return new ResponseEntity<>(activeAccountServices.searchAlActiveAccount(), HttpStatus.OK);
     }
 
-    @GetMapping(path = "search/all")
+    @GetMapping(path = "all")
     public ResponseEntity<List<ActiveAccount>> getAllActiveAccount(@RequestBody @Valid Client client) {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()) + " Active Account Get All Active Account GET");
         return new ResponseEntity<>(activeAccountServices.getAllActiveAccount(client), HttpStatus.OK);
