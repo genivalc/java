@@ -5,8 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -14,7 +19,7 @@ import java.util.Objects;
 @Builder
 @Entity
 @Table(name = "tb_client")
-public class Client {
+public class Client implements UserDetails {
     private static long serial;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +43,9 @@ public class Client {
     private Integer quantityOrder;
 
     public Client() {
+    }
+
+    public Client(String name, String address, String cpf, String phone, String login, String encryptedPassword, Integer userType) {
         this.id = ++Client.serial;
         this.dateCreation = dateModification = LocalDateTime.now();
     }
@@ -101,6 +109,7 @@ public class Client {
     public String getPassword() {
         return password;
     }
+
 
     public void setPassword(String password) {
         this.password = password;
@@ -186,17 +195,38 @@ public class Client {
         return id == 1 || id == 2;
     }
 
-//    @Override
-//    public String toString() {
-//        return "-----------------------------------------------------------------------\n"
-//                + "Identificacao (id): " + id + "\n"
-//                + "Nome              : " + name + "\n"
-//                + "CPF               : " + CPF + "\n"
-//                + "Endereco          : " + address + "\n"
-//                + "Telefone          : " + password + "\n"
-//                + "Login             : " + login + "\n"
-//                + "Tipo de Usuário   : " + searchType(userType) + "\n"
-//                + "Data Criacao      : " + dateCreation+ "\n"
-//                + "Data Modificacao  : " + dateModification + "\n";
-//    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.userType == 1)
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        else if (this.userType == 2 || this.userType == 3) return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        else return null;
+    }
+
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 }
