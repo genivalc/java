@@ -17,7 +17,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "tb_activeAccount")
 public class ActiveAccount {
-    Util util = new Util();
 
     private static long serial;
     @Id
@@ -133,30 +132,39 @@ public class ActiveAccount {
         return hash;
     }
 
-    //ajeitar
-//    @Override
-//    public String toString() {
-//
-//        return
-//                "| " + util.textoColuna("" + id,  3)
-//                        + " | " + util.textoColuna(conta.getCliente().getNome(), 12)
-//                        + " | " + util.textoColuna(ativo.getTicker(), 6)
-//                        + " | " + util.textoColuna("" + totalAtivos, 5)
-//                        + " | " + util.textoColuna("" + this.valorCompra.multiply(new BigDecimal(totalAtivos)), 11)
-//                        + " | " + util.textoColuna("" + ativo.getPrecoAtual(), 13)
-//                        + " | " + util.textoColuna(util.FormataData(dataCriacao), 12) + " |\n";
-//    }
-//
+    public String columnText(String text, int size) {
+        if (text.length() > size) {
+            return text.substring(0, size);
+        } else if (text.length() < size) {
+            return String.format("%-" + size + "s", text);
+        } else {
+            return text;
+        }
+    }
+
+    @Override
+    public String toString() {
+
+        return
+                "| " + columnText("" + id,  3)
+                        + " | " + columnText( account.getClient().getName(), 12)
+                        + " | " + columnText( active.getTicker() , 6)
+                        + " | " + columnText("" + getTotalActive(), 5)
+                        + " | " + columnText("" + this.valorCompra.multiply(new BigDecimal(getTotalActive())), 11)
+                        + " | " + columnText("" + active.getCurrentPrice(), 13);
+//                        + " | " + columnText(getDateCreation(), 12) + " |\n";
+    }
+
     public String toStringHeader() {
         return
 
-                "| " + util.columnText("ID",  3)
-                        + " | " + util.columnText("Cliente", 12)
-                        + " | " + util.columnText("Ativo", 6)
-                        + " | " + util.columnText("Total", 5)
-                        + " | " + util.columnText("Valor Total", 11)
-                        + " | " + util.columnText("Cotacao Atual", 13)
-                        + " | " + util.columnText("Data Criação", 12) + " |\n"
+                "| " + columnText("ID",  3)
+                        + " | " + columnText("Cliente", 12)
+                        + " | " + columnText("Ativo", 6)
+                        + " | " + columnText("Total", 5)
+                        + " | " + columnText("Valor Total", 11)
+                        + " | " + columnText("Cotacao Atual", 13)
+                        + " | " + columnText("Data Criação", 12) + " |\n"
                         + "-------------------------------------------------------------------------\n";
     }
 }

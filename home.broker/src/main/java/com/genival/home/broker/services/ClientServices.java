@@ -1,10 +1,12 @@
 package com.genival.home.broker.services;
 
+import com.genival.home.broker.doman.auth.RegisterDTO;
 import com.genival.home.broker.entities.Client;
 import com.genival.home.broker.repositories.ClientRepositories;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +20,11 @@ public class ClientServices {
     @Autowired
     private ClientRepositories clientRepositories;
 
-    public boolean save(Client client) {
-        clientRepositories.save(client);
+    public boolean register(RegisterDTO client) {
+        if (clientRepositories.findByLogin(client.getLogin()) != null) return false;
+        String encryptedPassword = new BCryptPasswordEncoder().encode(client.getPassword());
+        Client newClient = new Client(client.getName(), client.getAddress(), client.getCPF(), client.getPhone(), client.getLogin(), encryptedPassword, client.getUserType());
+        clientRepositories.save(newClient);
         return true;
     }
 

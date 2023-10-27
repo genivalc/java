@@ -1,5 +1,10 @@
 package com.genival.home.broker.utils;
 
+import com.genival.home.broker.entities.Account;
+import com.genival.home.broker.entities.Active;
+import com.genival.home.broker.entities.Client;
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
@@ -9,20 +14,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import com.genival.home.broker.entities.Account;
-import com.genival.home.broker.entities.Active;
-import com.genival.home.broker.entities.Client;
-import org.springframework.stereotype.Component;
-
 @Component
 public class Util {
+    public static Object doubleToString;
+    static NumberFormat formatValue = new DecimalFormat("R$ #,##0.00");
     private static Client legacyClient = null;
     private static Active legacyActive = null;
     private static Account legacyAccount = null;
     private static LocalDateTime dateTime = LocalDateTime.now();
-
-    static NumberFormat formatValue = new DecimalFormat("R$ #,##0.00");
-    public static Object doubleToString;
 
     public static void registerClient(Client client) {
         legacyClient = client;
@@ -103,31 +102,19 @@ public class Util {
         if (year > 2000 && year < 2050) {
             int leapYearTest = year % 4;
             boolean isLeapYear;
-            if (leapYearTest == 0) {
-                isLeapYear = true;
-            } else {
-                isLeapYear = false;
-            }
+            isLeapYear = leapYearTest == 0;
             if (month >= 1 && month <= 12) {
                 if (month == 2 && isLeapYear) {
-                    if (day >= 1 && day <= 29) {
-                        return true;
-                    }
+                    return day >= 1 && day <= 29;
                 } else {
                     if (month == 2 && !isLeapYear) {
-                        if (day >= 1 && day <= 28) {
-                            return true;
-                        }
+                        return day >= 1 && day <= 28;
                     } else {
                         if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
-                            if (day >= 1 && day <= 31) {
-                                return true;
-                            }
+                            return day >= 1 && day <= 31;
                         } else {
                             if (month == 4 || month == 6 || month == 9 || month == 11) {
-                                if (day >= 1 && day <= 30) {
-                                    return true;
-                                }
+                                return day >= 1 && day <= 30;
                             }
                         }
                     }
