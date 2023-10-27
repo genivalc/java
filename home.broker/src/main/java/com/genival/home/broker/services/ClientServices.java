@@ -1,5 +1,6 @@
 package com.genival.home.broker.services;
 
+import com.genival.home.broker.doman.auth.RegisterDTO;
 import com.genival.home.broker.entities.Client;
 import com.genival.home.broker.repositories.ClientRepositories;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,10 @@ public class ClientServices {
     @Autowired
     private ClientRepositories clientRepositories;
 
-    public boolean save(Client client) {
-        if(clientRepositories.findByLogin(client.getLogin()) != null) return  false;
-
+    public boolean register(RegisterDTO client) {
+        if (clientRepositories.findByLogin(client.getLogin()) != null) return false;
         String encryptedPassword = new BCryptPasswordEncoder().encode(client.getPassword());
-        Client newClient = new Client(client.getName(),client.getAddress(), client.getCPF(), client.getPhone() ,client.getLogin() ,encryptedPassword, client.getUserType());
-
+        Client newClient = new Client(client.getName(), client.getAddress(), client.getCPF(), client.getPhone(), client.getLogin(), encryptedPassword, client.getUserType());
         clientRepositories.save(newClient);
         return true;
     }

@@ -25,12 +25,20 @@ public class Client implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = true, unique = false)
     private String name;
+    @Column(nullable = true, unique = false)
     private String address;
+    @Column(nullable = true, unique = true)
     private String CPF;
+    @Column(nullable = true, unique = false)
     private String phone;
+
+    @Column(nullable = true, unique = true)
     private String login;
+    @Column(nullable = true, unique = false)
     private String password;
+    @Column(nullable = true, unique = false)
     private Integer userType;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") // Use the appropriate date format
@@ -47,6 +55,13 @@ public class Client implements UserDetails {
 
     public Client(String name, String address, String cpf, String phone, String login, String encryptedPassword, Integer userType) {
         this.id = ++Client.serial;
+        this.name = name;
+        this.address = address;
+        this.CPF = cpf;
+        this.phone = phone;
+        this.login = login;
+        this.password = encryptedPassword;
+        this.userType = userType;
         this.dateCreation = dateModification = LocalDateTime.now();
     }
 
